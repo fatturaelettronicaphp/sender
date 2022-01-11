@@ -1,35 +1,47 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "fatturaelettronicaphp/sender",
+    "description": "Implementazione generica di Sender per l'invio di Fatture Elettroniche ad intermediari per lo SDI",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "Fattura Elettronica",
+        "PHP",
+        "SDI",
+        "Intermediari",
+        "Invio Fattura Elettronica"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/fatturaelettronicaphp/sender",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Daniele Rosario",
+            "email": "daniele@weble.it",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "php-http/discovery": "^1.14",
+        "psr/http-message": "^1.0",
+        "psr/http-client": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "pestphp/pest": "^1.20",
-        "spatie/ray": "^1.28"
+        "php-http/message": "^1.0",
+        "guzzlehttp/psr7": "^1.0",
+        "php-http/mock-client": "^1.0",
+        "nyholm/psr7": "^1.0"
+    },
+    "suggest": {
+        "fatturaelettronicaphp/fattura-elettronica": "Package to read, write and validate Digital Documents (Fatture Elettroniche)"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "FatturaElettronicaPhp\\Sender\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "FatturaElettronicaPhp\\Sender\\Tests\\": "tests"
         }
     },
     "scripts": {
