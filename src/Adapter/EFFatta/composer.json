@@ -1,0 +1,39 @@
+{
+    "name": "fatturaelettronicaphp/effatta-sender",
+    "description": "Implementazione del Sender per il servizio di Fattuazione Elettronica di EFFatta",
+    "keywords": [
+        "Fattura Elettronica",
+        "EFFatta",
+        "PHP",
+        "SDI",
+        "Invio Fattura Elettronica"
+    ],
+    "type": "library",
+    "homepage": "https://github.com/fatturaelettronicaphp/efatta-sender",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniele Rosario",
+            "email": "daniele@weble.it",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "fatturaelettronicaphp/sender": "^1.0.0"
+    },
+    "suggest": {
+        "fatturaelettronicaphp/fattura-elettronica": "Package to read, write and validate Digital Documents (Fatture Elettroniche)"
+    },
+    "autoload": {
+        "psr-4": {
+            "FatturaElettronicaPhp\\Sender\\Adapter\\EFFatta\\": ""
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

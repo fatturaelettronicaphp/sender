@@ -1,0 +1,47 @@
+{
+    "name": "fatturaelettronicaphp/aruba-sender",
+    "description": "Implementazione del Sender per il servizio di Fattuazione Elettronica di Aruba",
+    "keywords": [
+        "Fattura Elettronica",
+        "Aruba",
+        "PHP",
+        "SDI",
+        "Invio Fattura Elettronica"
+    ],
+    "type": "library",
+    "homepage": "https://github.com/fatturaelettronicaphp/aruba-sender",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniele Rosario",
+            "email": "daniele@weble.it",
+            "role": "Developer"
+        },
+        {
+            "name": "Kristian Lentino",
+            "role": "Developer"
+        }
+    ],
+    ],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "fatturaelettronicaphp/sender:": "^1.0.0"
+    },
+    "require-dev": {
+
+    },
+    "suggest": {
+        "fatturaelettronicaphp/fattura-elettronica": "Package to read, write and validate Digital Documents (Fatture Elettroniche)"
+    },
+    "autoload": {
+        "psr-4": {
+            "FatturaElettronicaPhp\\Sender\\Adapter\\Aruba\\": ""
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

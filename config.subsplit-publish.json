@@ -1,0 +1,9 @@
+{
+    "sub-splits": [
+        {
+            "name": "aruba",
+            "directory": "src/Adapter/Aruba",
+            "target": "git@github.com:fatturaelettronicaphp/sender-aruba.git"
+        }
+    ]
+}

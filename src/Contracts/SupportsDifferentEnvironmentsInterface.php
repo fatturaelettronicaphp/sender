@@ -1,6 +1,6 @@
 <?php
 
-namespace FatturaElettronicaPhp\Sender;
+namespace FatturaElettronicaPhp\Sender\Contracts;
 
 interface SupportsDifferentEnvironmentsInterface
 {

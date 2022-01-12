@@ -1,16 +1,10 @@
 <?php
 
-namespace FatturaElettronicaPhp\Sender;
+namespace FatturaElettronicaPhp\Sender\Adapter;
 
 trait HasEnvironments
 {
-    protected array $environments = [];
     protected string $environment;
-
-    public function environments(): array
-    {
-        return $this->environments;
-    }
 
     public function setEnvironment(string $environment): self
     {

@@ -1,9 +1,9 @@
 <?php
 
-use FatturaElettronicaPhp\Sender\Tests\ExampleSender;
+use FatturaElettronicaPhp\Sender\Tests\ExampleAdapter;
 
 it('can manage an example Sender', function () {
-    $sender = new ExampleSender();
+    $sender = new ExampleAdapter();
     $sender->send('SOME XML');
 
     expect($sender->sent())->toBeTrue();
