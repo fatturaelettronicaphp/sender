@@ -22,7 +22,6 @@
             "role": "Developer"
         }
     ],
-    ],
     "require": {
         "php": "^8.0",
         "ext-json": "*",

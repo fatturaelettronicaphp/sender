@@ -4,6 +4,16 @@
             "name": "aruba",
             "directory": "src/Adapter/Aruba",
             "target": "git@github.com:fatturaelettronicaphp/sender-aruba.git"
+        },
+        {
+            "name": "acube",
+            "directory": "src/Adapter/Acube",
+            "target": "git@github.com:fatturaelettronicaphp/sender-acube.git"
+        },
+        {
+            "name": "effatta",
+            "directory": "src/Adapter/EFFatta",
+            "target": "git@github.com:fatturaelettronicaphp/sender-effatta.git"
         }
     ]
 }
