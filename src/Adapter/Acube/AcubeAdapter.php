@@ -20,10 +20,15 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
     private const SANDBOX_INVOICE_URL = 'https://api-sandbox.acubeapi.com/invoices';
     private const INVOICE_URL = 'https://api.acubeapi.com/invoices';
     private const AUTH_URL = 'https://api.acubeapi.com/login_check';
+    private const SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT = 'simplified';
 
-    public function send(string $xml): void
+    public function send(string $xml): string|bool
     {
-        $request = $this->createRequest('POST', $this->invoiceUrl())
+        $invoice_url = $this->invoiceUrl();
+        if ($this->config->get('is_simplified') === true) {
+            $invoice_url .= '/'. self::SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT;
+        }
+        $request = $this->createRequest('POST', $invoice_url)
             ->withHeader('Content-Type', 'application/xml')
             ->withHeader('Authorization', 'Bearer ' . $this->login())
             ->withBody(
@@ -33,14 +38,16 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         $response = $this->sendRequest($request);
         $result = json_decode($response, true);
 
-        if ($result !== true) {
+        if (empty($result['uuid'])) {
             throw new CannotSendDigitalDocumentException($response);
         }
+
+        return $result['uuid'] ?? false;
     }
 
     private function login(): string
     {
-        if ($this->config->get('email') === null || $this->config->get('password')) {
+        if ($this->config->get('email') === null || $this->config->get('password') === null) {
             throw new InvalidCredentialsException("`email` and `password` configuration keys are required");
         }
 
@@ -72,11 +79,12 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
 
     private function invoiceUrl(): string
     {
+        $invoice_url = self::SANDBOX_INVOICE_URL;
         if ($this->environment() === self::ENV_PRODUCTION) {
-            return self::INVOICE_URL;
+            $invoice_url = self::INVOICE_URL;
         }
 
-        return self::SANDBOX_INVOICE_URL;
+        return $invoice_url;
     }
 
     public function environments(): array

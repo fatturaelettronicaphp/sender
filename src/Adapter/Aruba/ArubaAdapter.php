@@ -42,6 +42,10 @@ class ArubaAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
 
     private function login(): string
     {
+        if ($this->config->get('email') === null || $this->config->get('password') === null) {
+            throw new InvalidCredentialsException("`email` and `password` configuration keys are required");
+        }
+
         $request = $this->createRequest('POST', $this->authUrl())
             ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
             ->withBody($this->createBody([

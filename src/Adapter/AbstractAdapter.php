@@ -51,6 +51,10 @@ abstract class AbstractAdapter implements HttpAdapterInterface
 
         return $this;
     }
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
 
     protected function createRequest(string $method, string $uri): RequestInterface
     {
