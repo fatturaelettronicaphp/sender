@@ -24,8 +24,8 @@ it('cannot send without valid environment', function () {
 })->group('acube')->throws(InvalidEnvironmentException::class);
 it('can be sent - sample invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'k.lentino@libero.it',
-        'password' => 'b63?a2_#gBoWoVi4t',
+        'email' => 'YOUR_EMAIL',
+        'password' => 'YOUR_PASSWORD',
         'environment' => AcubeAdapter::ENV_SANDBOX,
     ]);
     $path_xml_example = __DIR__. DIRECTORY_SEPARATOR."samples/invoice_sample.xml";
@@ -35,8 +35,8 @@ it('can be sent - sample invoice', function () {
 })->group('acube');
 it('can be sent - multiline invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'k.lentino@libero.it',
-        'password' => 'b63?a2_#gBoWoVi4t',
+        'email' => 'YOUR_EMAIL',
+        'password' => 'YOUR_PASSWORD',
         'environment' => AcubeAdapter::ENV_SANDBOX,
     ]);
     $path_xml_example = __DIR__. DIRECTORY_SEPARATOR."samples/invoice_sample_multiline.xml";
@@ -46,8 +46,8 @@ it('can be sent - multiline invoice', function () {
 })->group('acube');
 it('cannot be sent - simplified invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'k.lentino@libero.it',
-        'password' => 'b63?a2_#gBoWoVi4t',
+        'email' => 'YOUR_EMAIL',
+        'password' => 'YOUR_PASSWORD',
         'environment' => AcubeAdapter::ENV_SANDBOX,
     ]);
     $path_xml_example = __DIR__. DIRECTORY_SEPARATOR."samples/invoice_simplified_sample.xml";
@@ -57,8 +57,8 @@ it('cannot be sent - simplified invoice', function () {
 })->throws(RequestException::class)->group('acube');
 it('can be sent - simplified invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'k.lentino@libero.it',
-        'password' => 'b63?a2_#gBoWoVi4t',
+        'email' => 'YOUR_EMAIL',
+        'password' => 'YOUR_PASSWORD',
         'environment' => AcubeAdapter::ENV_SANDBOX,
         'is_simplified' => true,
     ]);
