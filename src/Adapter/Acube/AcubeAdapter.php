@@ -16,10 +16,10 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
     public const ENV_SANDBOX = 'sandbox';
     public const ENV_PRODUCTION = 'production';
 
-    private const SANDBOX_AUTH_URL = 'https://api-sandbox.acubeapi.com/login_check';
+    private const SANDBOX_AUTH_URL = 'https://common-sandbox.api.acubeapi.com/login';
     private const SANDBOX_INVOICE_URL = 'https://api-sandbox.acubeapi.com/invoices';
     private const INVOICE_URL = 'https://api.acubeapi.com/invoices';
-    private const AUTH_URL = 'https://api.acubeapi.com/login_check';
+    private const AUTH_URL = 'https://common.api.acubeapi.com/login';
     private const SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT = 'simplified';
 
     public function send(string $xml): string|bool

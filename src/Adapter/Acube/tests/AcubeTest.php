@@ -3,6 +3,7 @@
 use FatturaElettronicaPhp\Sender\Adapter\Acube\AcubeAdapter;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidCredentialsException;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidEnvironmentException;
+use FatturaElettronicaPhp\Sender\Exceptions\RequestException;
 
 /**
  * ./vendor/bin/pest --group=acube
@@ -23,8 +24,8 @@ it('cannot send without valid environment', function () {
 })->group('acube')->throws(InvalidEnvironmentException::class);
 it('can be sent - sample invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'YOUR_EMAIL',
-        'password' => 'YOUR_PASSWORD',
+        'email' => 'k.lentino@libero.it',
+        'password' => 'b63?a2_#gBoWoVi4t',
         'environment' => AcubeAdapter::ENV_SANDBOX,
     ]);
     $path_xml_example = __DIR__. DIRECTORY_SEPARATOR."samples/invoice_sample.xml";
@@ -34,8 +35,8 @@ it('can be sent - sample invoice', function () {
 })->group('acube');
 it('can be sent - multiline invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'YOUR_EMAIL',
-        'password' => 'YOUR_PASSWORD',
+        'email' => 'k.lentino@libero.it',
+        'password' => 'b63?a2_#gBoWoVi4t',
         'environment' => AcubeAdapter::ENV_SANDBOX,
     ]);
     $path_xml_example = __DIR__. DIRECTORY_SEPARATOR."samples/invoice_sample_multiline.xml";
@@ -45,19 +46,19 @@ it('can be sent - multiline invoice', function () {
 })->group('acube');
 it('cannot be sent - simplified invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'YOUR_EMAIL',
-        'password' => 'YOUR_PASSWORD',
+        'email' => 'k.lentino@libero.it',
+        'password' => 'b63?a2_#gBoWoVi4t',
         'environment' => AcubeAdapter::ENV_SANDBOX,
     ]);
     $path_xml_example = __DIR__. DIRECTORY_SEPARATOR."samples/invoice_simplified_sample.xml";
     $xml = file_get_contents($path_xml_example);
     $uuid = $sender->send($xml);
-    expect($uuid)->toBeString();
-})->group('acube');
+
+})->throws(RequestException::class)->group('acube');
 it('can be sent - simplified invoice', function () {
     $sender = new AcubeAdapter([
-        'email' => 'YOUR_EMAIL',
-        'password' => 'YOUR_PASSWORD',
+        'email' => 'k.lentino@libero.it',
+        'password' => 'b63?a2_#gBoWoVi4t',
         'environment' => AcubeAdapter::ENV_SANDBOX,
         'is_simplified' => true,
     ]);
