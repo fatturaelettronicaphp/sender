@@ -22,4 +22,3 @@ it('cannot send without valid environment', function () {
     ]);
     $sender->send('SOME XML');
 })->throws(InvalidEnvironmentException::class);
-
