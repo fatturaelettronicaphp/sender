@@ -1,0 +1,20 @@
+{
+    "acube": {
+        "email": "",
+        "password": "",
+        "environment": "",
+        "simplified": ""
+    },
+    "aruba": {
+        "username": "",
+        "password": ""
+    },
+    "effatta": {
+        "email": "",
+        "password": "",
+        "source": "",
+        "filename": "",
+        "idMittente": "",
+        "dataUserId": ""
+    }
+}

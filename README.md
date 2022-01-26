@@ -51,6 +51,12 @@ Per un più veloce sviluppo, si consiglia di estendere la classe `FatturaElettro
 
 ## Testing
 
+Per eseguire alcuni test, è necessario avere le credenziali dei vari adapter. Di default la suite di test marca come `skipped` i test per cui sono necessarie tali credenziali, e non sono state fornite.
+
+Per fornire tali credenziali, copiare il file `.auth.json.dist` in `.auth.json` e popolare le chiavi necessarie.
+
+Per lanciare la suite di test:
+
 ```bash
 composer test
 ```

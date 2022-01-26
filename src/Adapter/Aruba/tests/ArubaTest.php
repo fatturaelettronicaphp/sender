@@ -4,6 +4,8 @@ use FatturaElettronicaPhp\Sender\Adapter\Aruba\ArubaAdapter;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidCredentialsException;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidEnvironmentException;
 
+$shouldSkip = ! isset($TEST_AUTHS['aruba']);
+
 it('cannot send without valid login details', function () {
     $sender = new ArubaAdapter([
         'username' => 'PIPPO',
@@ -20,3 +22,4 @@ it('cannot send without valid environment', function () {
     ]);
     $sender->send('SOME XML');
 })->throws(InvalidEnvironmentException::class);
+

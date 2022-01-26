@@ -4,12 +4,15 @@ namespace FatturaElettronicaPhp\Sender\Adapter\Acube;
 
 use FatturaElettronicaPhp\Sender\Adapter\AbstractAdapter;
 use FatturaElettronicaPhp\Sender\Adapter\HasEnvironments;
+use FatturaElettronicaPhp\Sender\Config;
+use FatturaElettronicaPhp\Sender\Contracts\ProvidesConfigurationKeys;
 use FatturaElettronicaPhp\Sender\Contracts\SenderAdapterInterface;
 use FatturaElettronicaPhp\Sender\Contracts\SupportsDifferentEnvironmentsInterface;
 use FatturaElettronicaPhp\Sender\Exceptions\CannotSendDigitalDocumentException;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidCredentialsException;
+use FatturaElettronicaPhp\Sender\Result;
 
-class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, SupportsDifferentEnvironmentsInterface
+class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, SupportsDifferentEnvironmentsInterface, ProvidesConfigurationKeys
 {
     use HasEnvironments;
 
@@ -22,13 +25,13 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
     private const AUTH_URL = 'https://common.api.acubeapi.com/login';
     private const SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT = 'simplified';
 
-    public function send(string $xml): string|bool
+    public function send(string $xml, ?Config $config = null): Result
     {
-        $invoice_url = $this->invoiceUrl();
-        if ($this->config->get('is_simplified') === true) {
-            $invoice_url .= '/'. self::SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT;
+        if ($config) {
+            $this->config = $this->config->extend($config->toArray());
         }
-        $request = $this->createRequest('POST', $invoice_url)
+
+        $request = $this->createRequest('POST', $this->invoiceUrl())
             ->withHeader('Content-Type', 'application/xml')
             ->withHeader('Authorization', 'Bearer ' . $this->login())
             ->withBody(
@@ -38,11 +41,11 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         $response = $this->sendRequest($request);
         $result = json_decode($response, true);
 
-        if (empty($result['uuid'])) {
+        if (! $result || ! isset($result['uuid'])) {
             throw new CannotSendDigitalDocumentException($response);
         }
 
-        return $result['uuid'] ?? false;
+        return new Result($result);
     }
 
     private function login(): string
@@ -84,7 +87,16 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
             $invoice_url = self::INVOICE_URL;
         }
 
+        if ($this->simplified()) {
+            $invoice_url .= '/'. self::SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT;
+        }
+
         return $invoice_url;
+    }
+
+    public function simplified(): bool
+    {
+        return $this->config->get('simplified', false);
     }
 
     public function environments(): array
@@ -92,6 +104,16 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         return [
             self::ENV_PRODUCTION,
             self::ENV_SANDBOX,
+        ];
+    }
+
+    public function configKeys(): array
+    {
+        return [
+            'email',
+            'password',
+            'environment',
+            'simplified',
         ];
     }
 }

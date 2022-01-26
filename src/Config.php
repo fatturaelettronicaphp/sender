@@ -6,7 +6,7 @@ class Config
 {
     public const OPTION_ENVIRONMENT = 'environment';
 
-    private array $config = [];
+    private array $config;
 
     public function __construct(array $config = [])
     {
@@ -26,5 +26,10 @@ class Config
     public function withDefaults(array $defaults): Config
     {
         return new Config($this->config + $defaults);
+    }
+
+    public function toArray(): array
+    {
+        return $this->config;
     }
 }
