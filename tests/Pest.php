@@ -17,6 +17,4 @@ uses()->beforeEach(function () {
         $this->credentials = json_decode(file_get_contents($filePath));
         $this->hasCredentials = true;
     }
-
-
 })->in(...$adaptersWithTestCredentials);

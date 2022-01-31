@@ -3,7 +3,6 @@
 use FatturaElettronicaPhp\Sender\Adapter\Acube\AcubeAdapter;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidCredentialsException;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidEnvironmentException;
-use FatturaElettronicaPhp\Sender\Exceptions\RequestException;
 
 /**
  * ./vendor/bin/pest --group=acube
