@@ -8,7 +8,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class Sender
+class Sender implements SenderAdapterInterface
 {
     private SenderAdapterInterface $adapter;
 
@@ -28,8 +28,8 @@ class Sender
         return $this;
     }
 
-    public function send(string $xml): void
+    public function send(string $xml, ?Config $config = null): Result
     {
-        $this->adapter->send($xml);
+        $this->adapter->send($xml, $config);
     }
 }

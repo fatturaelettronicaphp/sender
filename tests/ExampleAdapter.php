@@ -4,8 +4,10 @@ namespace FatturaElettronicaPhp\Sender\Tests;
 
 use FatturaElettronicaPhp\Sender\Adapter\AbstractAdapter;
 use FatturaElettronicaPhp\Sender\Adapter\HasEnvironments;
+use FatturaElettronicaPhp\Sender\Config;
 use FatturaElettronicaPhp\Sender\Contracts\SenderAdapterInterface;
 use FatturaElettronicaPhp\Sender\Contracts\SupportsDifferentEnvironmentsInterface;
+use FatturaElettronicaPhp\Sender\Result;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
 use Psr\Http\Message\ResponseInterface;
@@ -31,11 +33,13 @@ class ExampleAdapter extends AbstractAdapter implements SenderAdapterInterface, 
         $this->setClient($client);
     }
 
-    public function send(string $xml): void
+    public function send(string $xml, ?Config $config = null): Result
     {
         $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest("POST", "https://example.com/invoice/send");
 
         $this->response = $this->sendHttpRequest($request);
+
+        return new Result(json_decode((string) $this->response->getBody(), true) ?? []);
     }
 
     public function sent(): bool
