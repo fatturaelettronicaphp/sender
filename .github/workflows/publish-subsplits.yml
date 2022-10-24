@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: '0'
           persist-credentials: 'false'
-      - uses: frankdejonge/use-github-token@1.0.1
+      - uses: frankdejonge/use-github-token@1.0.2
         with:
           authentication: 'skullbock:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
           user_name: 'Skullbock'
