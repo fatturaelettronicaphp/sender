@@ -4,12 +4,15 @@ namespace FatturaElettronicaPhp\Sender\Adapter\Aruba;
 
 use FatturaElettronicaPhp\Sender\Adapter\AbstractAdapter;
 use FatturaElettronicaPhp\Sender\Adapter\HasEnvironments;
+use FatturaElettronicaPhp\Sender\Config;
+use FatturaElettronicaPhp\Sender\Contracts\ProvidesConfigurationKeys;
 use FatturaElettronicaPhp\Sender\Contracts\SenderAdapterInterface;
 use FatturaElettronicaPhp\Sender\Contracts\SupportsDifferentEnvironmentsInterface;
 use FatturaElettronicaPhp\Sender\Exceptions\CannotSendDigitalDocumentException;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidCredentialsException;
+use FatturaElettronicaPhp\Sender\Result;
 
-class ArubaAdapter extends AbstractAdapter implements SenderAdapterInterface, SupportsDifferentEnvironmentsInterface
+class ArubaAdapter extends AbstractAdapter implements SenderAdapterInterface, SupportsDifferentEnvironmentsInterface, ProvidesConfigurationKeys
 {
     use HasEnvironments;
 
@@ -21,8 +24,12 @@ class ArubaAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
     private const INVOICE_URL = 'https://auth.fatturazioneelettronica.aruba.it';
     private const AUTH_URL = 'https://ws.fatturazioneelettronica.aruba.it';
 
-    public function send(string $xml): void
+    public function send(string $xml, ?Config $config = null): Result
     {
+        if ($config) {
+            $this->config = $this->config->extend($config->toArray());
+        }
+
         $request = $this->createRequest('POST', $this->invoiceUrl())
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json')
@@ -38,10 +45,16 @@ class ArubaAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         if ($result !== true) {
             throw new CannotSendDigitalDocumentException($response);
         }
+
+        return new Result([]);
     }
 
     private function login(): string
     {
+        if ($this->config->get('username') === null || $this->config->get('password') === null) {
+            throw new InvalidCredentialsException("`username` and `password` configuration keys are required");
+        }
+
         $request = $this->createRequest('POST', $this->authUrl())
             ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
             ->withBody($this->createBody([
@@ -83,6 +96,14 @@ class ArubaAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         return [
             self::ENV_PRODUCTION,
             self::ENV_DEMO,
+        ];
+    }
+
+    public function configKeys(): array
+    {
+        return [
+            'username',
+            'password',
         ];
     }
 }

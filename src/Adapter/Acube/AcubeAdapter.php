@@ -4,25 +4,33 @@ namespace FatturaElettronicaPhp\Sender\Adapter\Acube;
 
 use FatturaElettronicaPhp\Sender\Adapter\AbstractAdapter;
 use FatturaElettronicaPhp\Sender\Adapter\HasEnvironments;
+use FatturaElettronicaPhp\Sender\Config;
+use FatturaElettronicaPhp\Sender\Contracts\ProvidesConfigurationKeys;
 use FatturaElettronicaPhp\Sender\Contracts\SenderAdapterInterface;
 use FatturaElettronicaPhp\Sender\Contracts\SupportsDifferentEnvironmentsInterface;
 use FatturaElettronicaPhp\Sender\Exceptions\CannotSendDigitalDocumentException;
 use FatturaElettronicaPhp\Sender\Exceptions\InvalidCredentialsException;
+use FatturaElettronicaPhp\Sender\Result;
 
-class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, SupportsDifferentEnvironmentsInterface
+class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, SupportsDifferentEnvironmentsInterface, ProvidesConfigurationKeys
 {
     use HasEnvironments;
 
     public const ENV_SANDBOX = 'sandbox';
     public const ENV_PRODUCTION = 'production';
 
-    private const SANDBOX_AUTH_URL = 'https://api-sandbox.acubeapi.com/login_check';
+    private const SANDBOX_AUTH_URL = 'https://common-sandbox.api.acubeapi.com/login';
     private const SANDBOX_INVOICE_URL = 'https://api-sandbox.acubeapi.com/invoices';
     private const INVOICE_URL = 'https://api.acubeapi.com/invoices';
-    private const AUTH_URL = 'https://api.acubeapi.com/login_check';
+    private const AUTH_URL = 'https://common.api.acubeapi.com/login';
+    private const SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT = 'simplified';
 
-    public function send(string $xml): void
+    public function send(string $xml, ?Config $config = null): Result
     {
+        if ($config) {
+            $this->config = $this->config->extend($config->toArray());
+        }
+
         $request = $this->createRequest('POST', $this->invoiceUrl())
             ->withHeader('Content-Type', 'application/xml')
             ->withHeader('Authorization', 'Bearer ' . $this->login())
@@ -33,14 +41,16 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         $response = $this->sendRequest($request);
         $result = json_decode($response, true);
 
-        if ($result !== true) {
+        if (! $result || ! isset($result['uuid'])) {
             throw new CannotSendDigitalDocumentException($response);
         }
+
+        return new Result($result);
     }
 
     private function login(): string
     {
-        if ($this->config->get('email') === null || $this->config->get('password')) {
+        if ($this->config->get('email') === null || $this->config->get('password') === null) {
             throw new InvalidCredentialsException("`email` and `password` configuration keys are required");
         }
 
@@ -72,11 +82,21 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
 
     private function invoiceUrl(): string
     {
+        $invoice_url = self::SANDBOX_INVOICE_URL;
         if ($this->environment() === self::ENV_PRODUCTION) {
-            return self::INVOICE_URL;
+            $invoice_url = self::INVOICE_URL;
         }
 
-        return self::SANDBOX_INVOICE_URL;
+        if ($this->simplified()) {
+            $invoice_url .= '/'. self::SIMPLIFIED_INVOICE_ADDITIONAL_ENDPOINT;
+        }
+
+        return $invoice_url;
+    }
+
+    public function simplified(): bool
+    {
+        return $this->config->get('simplified', false);
     }
 
     public function environments(): array
@@ -84,6 +104,16 @@ class AcubeAdapter extends AbstractAdapter implements SenderAdapterInterface, Su
         return [
             self::ENV_PRODUCTION,
             self::ENV_SANDBOX,
+        ];
+    }
+
+    public function configKeys(): array
+    {
+        return [
+            'email',
+            'password',
+            'environment',
+            'simplified',
         ];
     }
 }
